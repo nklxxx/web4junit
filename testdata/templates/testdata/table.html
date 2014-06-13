@@ -1,1 +1,28 @@
-{{ data }}
+<html>
+<head>
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script src="/static/testdata/dist/jquery.handsontable.full.js"></script>
+	<link rel="stylesheet" media="screen" href="/static/testdata/dist/jquery.handsontable.full.css">
+</head>
+<body>
+	{% for obj in objs %}
+	<h3>{{obj.name}}</h3>
+	<br/>
+	<div id="{{obj.name}}"></div>
+	<script>
+	  var data = {{ obj.data }};
+	  $("#{{obj.name}}").handsontable({
+		data: data,
+		minRows: 5,
+		minCols: 6,
+		minSpareRows: 1,
+		minSpareCols: 1,
+		autoWrapRow: true,
+		contextMenu: true
+	  });
+	</script>
+	{% endfor %}
+	<hr/>
+</body>
+</html>

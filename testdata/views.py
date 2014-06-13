@@ -8,9 +8,6 @@ def index(request):
 	return HttpResponse('hello world')
 
 def page(request, path):
-	return HttpResponse(path)
-
-def table(request, path, name):
-	obj = Data.objects.get(path=path, name=name)
-	context = { 'data': obj.data }
+	objs = Data.objects.filter(path=path)
+	context = { 'objs': objs }
 	return render(request, 'testdata/table.html', context)

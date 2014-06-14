@@ -24,3 +24,10 @@ def save(request):
 	obj.data = data
 	obj.save()
 	return HttpResponse('ok')
+
+def get(request):
+	path = request.GET["path"]
+	name = request.GET["name"]
+	obj = Data.objects.get(path=path, name=name)
+	data = obj.data
+	return HttpResponse(data)

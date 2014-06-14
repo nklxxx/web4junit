@@ -5,7 +5,10 @@ from models import Data
 # Create your views here.
 
 def index(request):
-	return HttpResponse('hello world')
+	objs = Data.objects.all()
+	list_path = set(obj.path for obj in objs)
+	context = { 'list_path': list_path}
+	return render(request, 'testdata/index.html', context)
 
 def page(request, path):
 	objs = Data.objects.filter(path=path)

@@ -9,9 +9,15 @@
 	<h3>{{obj.name}}</h3>
 	<br/>
 	<div id="{{obj.name}}"></div>
+	<button name="save">Save</button>
 	<script>
-	  var data = {{ obj.data }};
-	  $("#{{obj.name}}").handsontable({
+		var $container = $("#{{obj.name}}");
+		var $parent = $container.parent();
+		var handsontable = $container.data('handsontable');
+		{% autoescape off %}
+		var data = {{ obj.data }};
+		{% endautoescape %}
+		$container.handsontable({
 		data: data,
 		minRows: 5,
 		minCols: 6,
@@ -19,9 +25,33 @@
 		minSpareCols: 1,
 		autoWrapRow: true,
 		contextMenu: true
-	  });
+		});
+		var handsontable = $container.data('handsontable');
+		$parent.find('button[name=save]').click(function () {
+			$.ajax({
+			url: "json/save.json",
+			data: {"data": JSON.stringify(handsontable.getData()),
+				"path": "{{obj.path}}",
+				"name": "{{obj.name}}",
+			}, //returns all cells' data
+			//dataType: 'text',
+			type: 'POST',
+			success: function (res) {
+				if (res.result === 'ok') {
+				$console.text('Data saved');
+				}
+				else {
+				$console.text('Save error');
+				}
+			},
+			error: function () {
+				$console.text('Save error. POST method is not allowed on GitHub Pages. ' +
+				'Run this example on your own server to see the success message.');
+			}
+			});
+		});
 	</script>
-	{% endfor %}
 	<hr/>
+	{% endfor %}
 </body>
 </html>

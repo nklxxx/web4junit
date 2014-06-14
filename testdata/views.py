@@ -14,3 +14,13 @@ def page(request, path):
 	objs = Data.objects.filter(path=path)
 	context = { 'objs': objs }
 	return render(request, 'testdata/table.html', context)
+
+def save(request):
+	path = request.POST["path"]
+	name = request.POST["name"]
+	data = request.POST["data"]
+	#data = request.raw_post_data
+	obj = Data.objects.get(path=path, name=name)
+	obj.data = data
+	obj.save()
+	return HttpResponse('ok')
